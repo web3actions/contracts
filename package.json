@@ -1,6 +1,10 @@
 {
-  "name": "evm-contracts",
+  "name": "@cryptoactions/contracts",
   "version": "1.0.0",
+  "files": [
+    "**/*.sol",
+    "/build/contracts/*.json"
+  ],
   "description": "Oracle contracts and examples",
   "main": "index.js",
   "scripts": {
@@ -8,12 +12,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cryptoactions/evm-contracts.git"
+    "url": "git+https://github.com/cryptoactions/contracts.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/cryptoactions/evm-contracts/issues"
+    "url": "https://github.com/cryptoactions/contracts/issues"
   },
-  "homepage": "https://github.com/cryptoactions/evm-contracts#readme"
+  "homepage": "https://github.com/cryptoactions/contracts#readme"
 }

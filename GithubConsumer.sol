@@ -10,4 +10,9 @@ contract GithubConsumer {
   function setOracleCluster(address _oracleCluster) internal {
     oracleCluster = GithubOracleCluster(_oracleCluster);
   }
+
+  modifier onlyGithubOracleCluster() {
+    require(msg.sender == address(oracleCluster), 'Can only be called by oracle cluster.');
+    _;
+  }
 }

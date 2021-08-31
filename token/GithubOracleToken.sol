@@ -2,9 +2,9 @@
 pragma solidity 0.8.7;
 
 import "./ERC677Token.sol";
-import { StandardToken } from "./vendor/StandardToken.sol";
+// import { StandardToken } from "./vendor/StandardToken.sol";
 
-contract GithubOracleToken is StandardToken, ERC677Token {
+contract GithubOracleToken is ERC677Token {
 
   uint public constant totalSupply = 10**27;
   string public constant name = "ChainLink Token";
