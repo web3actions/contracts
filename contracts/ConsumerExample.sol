@@ -1,61 +1,28 @@
 // SPDX-License-Identifier: GPL-3.0
-
 pragma solidity 0.8.7;
 
-import './token/GithubOracleToken.sol';
+import "./GithubConsumer.sol";
 
-contract GithubOracleCluster {
-  address public owner;
-  uint256 public fee;
-  string public workflowHash;
+contract ConsumerExample is GithubConsumer {
+  string prId;
+  bool prMerged;
 
-  struct Oracle {
-    bool enabled;
-    uint256 stake;
-  }
-  mapping(address => Oracle) oracles;
-  mapping(address => uint256) consumerBalances;
-
-  struct Request {
-    address consumer;
-    string query;
-    bytes4 fulfillFunction;
-  }
-  uint256 nextRequestId;
-  mapping(uint256 => Request) requests;
-
-  constructor(uint256 _fee, string calldata _workflowHash) returns(address) {
-    owner = msg.sender;
-    fee = _fee;
-    workflowHash = _workflowHash;
-    GithubOracleToken clusterGovToken = new GithubOracleToken(_name, _symbol);
-    clusterGovToken.mintMaxSupplyFor(owner);
-    return clusterGovToken;
+  constructor(address _oracleCluster, string calldata _prId) {
+    setOracleCluster(_oracleCluster);
+    prId = _prId;
+    prMerged = false;
   }
 
-  modifier onlyOwner() {
-    require(msg.sender == owner, "Only owner can add oracles to cluster.");
-    _;
+  function requestUpdatePrMerged(string _prId) payable public {
+    require(msg.value >= oracleCluster.fee, "Insufficiant payment.");
+    oracleCluster.topUpConsumerBalance.value(msg.value)();
+    oracleCluster.request(
+      this.updatePrMerged.selector,
+      'node($id) { }'
+    );
   }
 
-  function addOracle(address _account) public onlyOwner {
-    oracles[_account] = true;
-  }
-
-  function removeOracle(address _account) public onlyOwner {
-    oracles[_account] = false;
-  }
-
-  function topUpConsumerBalance() public payable {
-    consumerBalances[msg.sender] += msg.value;
-  }
-
-  function request(bytes4 _fulfillFunction, string calldata _query) public {
-    requests[nextRequestId] = Request(msg.sender, _query, _fulfillFunction);
-    nextRequestId++;
-  }
-
-  function fulfill(uint256 _requestId, bytes32 _data, bytes memory _sig1, bytes memory _sig2) public returns (bool) {
+  function fulfillRequest(uint256 _requestId, bytes32 _data, bytes memory _sig1, bytes memory _sig2) public returns (bool) {
     require(oracles[msg.sender], "Only registered oracles can fulfill requests.");
     require(consumerBalances[requests[_requestId].consumer] >= fee, "Consumer balance insufficiant.");
 
