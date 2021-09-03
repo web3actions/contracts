@@ -2,11 +2,10 @@
   "name": "@cryptoactions/contracts",
   "version": "1.0.0",
   "files": [
-    "**/*.sol",
-    "/build/contracts/*.json"
+    "/src/**/*.sol",
+    "/build/*.json"
   ],
   "description": "Oracle contracts and examples",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/cryptoactions/contracts/issues"
   },
-  "homepage": "https://github.com/cryptoactions/contracts#readme"
+  "homepage": "https://github.com/cryptoactions/contracts#readme",
+  "dependencies": {
+    "@truffle/hdwallet-provider": "^1.5.0"
+  }
 }
