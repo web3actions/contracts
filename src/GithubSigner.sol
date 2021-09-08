@@ -45,7 +45,7 @@ contract GithubSigner {
     return lastRequestId;
   }
 
-  function verifySignature(uint256 _requestId, bytes calldata _signature, string calldata _value) public view returns(bool) {
+  function verifySignature(uint256 _requestId, bytes calldata _signature, bytes calldata _value) public view returns(bool) {
     require(msg.sender == requests[_requestId].consumer, 'Request can only be verified by who sent it.');
 
     return keccak256(abi.encodePacked(requests[_requestId].query, requests[_requestId].nodeId, _value))

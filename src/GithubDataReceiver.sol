@@ -18,6 +18,8 @@ contract GithubDataReceiver {
   address githubOracle;
   GithubSigner githubSigner;
 
+  event GithubOracleRequestEvent(uint256 requestId, uint256 signatureId);
+
   function setGithubOracle(address _oracle) internal {
     githubOracle = _oracle;
   }
@@ -26,16 +28,44 @@ contract GithubDataReceiver {
     githubSigner = GithubSigner(_signer);
   }
 
+  function getGithubRequest(uint256 _id) public view returns(
+    bytes4 fulfillSelector,
+    string memory query,
+    string memory nodeId,
+    bool fulfilled,
+    uint256 signatureId
+  ) {
+    return (
+      githubRequests[_id].fulfillSelector,
+      githubRequests[_id].query,
+      githubRequests[_id].nodeId,
+      githubRequests[_id].fulfilled,
+      githubRequests[_id].signatureId
+    );
+  }
+
+  function getGithubOracle() public view returns(address) {
+    return githubOracle;
+  }
+
   function getGithubOracleFee() public view returns(uint256) {
     return githubOracleFee;
+  }
+
+  function getGithubSigner() public view returns(address) {
+    return address(githubSigner);
   }
 
   function getGithubSignerFee() public view returns(uint256) {
     return githubSigner.fee();
   }
 
-  modifier signedGithubOracleResponse(uint256 _requestId, string memory _value, bytes memory _signature) {
-    require(msg.sender == githubOracle, 'Only Github Oracle.');
+  function getGithubOracleAndSignerFee() public view returns(uint256) {
+    return githubOracleFee + githubSigner.fee();
+  }
+
+  modifier signedGithubOracleResponse(uint256 _requestId, bytes memory _value, bytes memory _signature) {
+    require(tx.origin == githubOracle, 'Only Github Oracle.');
     require(githubRequests[_requestId].fulfilled == false, 'Request has already been fulfilled.');
     require(githubSigner.verifySignature(githubRequests[_requestId].signatureId, _signature, _value), 'Invalid signature.');
     githubRequests[_requestId].fulfilled = true;
@@ -43,13 +73,13 @@ contract GithubDataReceiver {
   }
 
   modifier githubOracleResponse(uint256 _requestId) {
-    require(msg.sender == githubOracle, 'Only Github Oracle.');
+    require(tx.origin == githubOracle, 'Only Github Oracle.');
     require(githubRequests[_requestId].fulfilled == false, 'Request has already been fulfilled.');
     githubRequests[_requestId].fulfilled = true;
     _;
   }
 
-  function githubOracleRequest(bytes4 _fulfillSelector, string calldata _query, string calldata _nodeId) internal returns(uint256) {
+  function githubOracleRequest(bytes4 _fulfillSelector, string memory _query, string memory _nodeId) internal returns(uint256) {
     require(msg.value >= githubOracleFee, "Insufficiant oracle payment.");
 
     payable(githubOracle).transfer(githubOracleFee);
@@ -62,11 +92,13 @@ contract GithubDataReceiver {
       false,
       0
     );
+
+    emit GithubOracleRequestEvent(lastGithubRequestId, 0);
     
     return lastGithubRequestId;
   }
 
-  function signedGithubOracleRequest(bytes4 _fulfillSelector, string calldata _query, string calldata _nodeId) internal returns(uint256) {
+  function signedGithubOracleRequest(bytes4 _fulfillSelector, string memory _query, string memory _nodeId) internal returns(uint256) {
     require(msg.value >= githubSigner.fee() + githubOracleFee, "Insufficiant oracle and signer payment.");
     
     payable(githubOracle).transfer(githubOracleFee);
@@ -81,7 +113,19 @@ contract GithubDataReceiver {
       false,
       signatureId
     );
+
+    emit GithubOracleRequestEvent(lastGithubRequestId, signatureId);
     
     return lastGithubRequestId;
+  }
+
+  function fulfillGithubRequestBool(uint256 _requestId, bool _value) public returns(bool) {
+    (bool success,) = address(this).call(abi.encodeWithSelector(githubRequests[_requestId].fulfillSelector, _requestId, _value));
+    return success;
+  }
+
+  function fulfillSignedGithubRequestBool(uint256 _requestId, bool _value, bytes memory _signature) public returns(bool) {
+    (bool success,) = address(this).call(abi.encodeWithSelector(githubRequests[_requestId].fulfillSelector, _requestId, _value, _signature));
+    return success;
   }
 }
