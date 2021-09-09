@@ -29,6 +29,11 @@ contract GithubSigner {
     fee = _fee;
   }
 
+  function getRequest(uint256 _requestId) public view returns(string memory, string memory) {
+    Request memory request = requests[_requestId];
+    return (request.query, request.nodeId);
+  }
+
   function requestSignature(string calldata _query, string calldata _nodeId) public payable returns(uint256) {
     require(msg.value >= fee, 'Insufficiant signer payment.');
     payable(owner).transfer(msg.value);
