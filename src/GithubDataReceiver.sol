@@ -52,8 +52,8 @@ contract GithubDataReceiver {
     return githubOracleFee;
   }
 
-  function getGithubSigner() public view returns(address) {
-    return address(githubSigner);
+  function getGithubSignerOwner() public view returns(address) {
+    return githubSigner.owner();
   }
 
   function getGithubSignerFee() public view returns(uint256) {
@@ -64,16 +64,16 @@ contract GithubDataReceiver {
     return githubOracleFee + githubSigner.fee();
   }
 
-  modifier signedGithubOracleResponse(uint256 _requestId, bytes memory _value, bytes memory _signature) {
-    require(tx.origin == githubOracle, 'Only Github Oracle.');
+  modifier signedGithubOracleResponseBool(uint256 _requestId, bool _value, bytes memory _signature) {
+    require(msg.sender == githubOracle, 'Only Github Oracle.');
     require(githubRequests[_requestId].fulfilled == false, 'Request has already been fulfilled.');
-    require(githubSigner.verifySignature(githubRequests[_requestId].signatureId, _signature, _value), 'Invalid signature.');
+    require(githubSigner.verifySignatureBool(githubRequests[_requestId].signatureId, _signature, _value), 'Invalid signature.');
     githubRequests[_requestId].fulfilled = true;
     _;
   }
 
   modifier githubOracleResponse(uint256 _requestId) {
-    require(tx.origin == githubOracle, 'Only Github Oracle.');
+    require(msg.sender == githubOracle, 'Only Github Oracle.');
     require(githubRequests[_requestId].fulfilled == false, 'Request has already been fulfilled.');
     githubRequests[_requestId].fulfilled = true;
     _;
@@ -117,15 +117,5 @@ contract GithubDataReceiver {
     emit GithubOracleRequestEvent(lastGithubRequestId, signatureId);
     
     return lastGithubRequestId;
-  }
-
-  function fulfillGithubRequestBool(uint256 _requestId, bool _value) public returns(bool) {
-    (bool success,) = address(this).call(abi.encodeWithSelector(githubRequests[_requestId].fulfillSelector, _requestId, _value));
-    return success;
-  }
-
-  function fulfillSignedGithubRequestBool(uint256 _requestId, bool _value, bytes memory _signature) public returns(bool) {
-    (bool success,) = address(this).call(abi.encodeWithSelector(githubRequests[_requestId].fulfillSelector, _requestId, _value, _signature));
-    return success;
   }
 }
