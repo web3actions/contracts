@@ -20,6 +20,10 @@
   },
   "homepage": "https://github.com/cryptoactions/contracts#readme",
   "dependencies": {
+    "@openzeppelin/contracts": "^4.3.1",
     "@truffle/hdwallet-provider": "^1.5.0"
+  },
+  "devDependencies": {
+    "truffle-plugin-verify": "^0.5.14"
   }
 }
