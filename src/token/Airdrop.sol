@@ -10,7 +10,7 @@ contract Airdrop is GithubWorkflowClient {
   mapping(string => uint256) claimed;
   uint256 public claimedTotal;
 
-  constructor(address _token, bytes32 _workflowHash) {
+  constructor(address _token, string memory _workflowHash) {
     token = CryptoActionsToken(_token);
     registerGithubWorkflow(msg.sender, 'airdrop', _workflowHash, 10000000000000000);
   }

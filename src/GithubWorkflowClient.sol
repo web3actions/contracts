@@ -3,7 +3,7 @@ pragma solidity 0.8.7;
 
 contract GithubWorkflowClient {
   struct GithubWorkflow {
-    bytes32 fileHash;
+    string fileHash;
     address account;
     uint256 fee;
   }
@@ -33,7 +33,7 @@ contract GithubWorkflowClient {
   }
 
   function getGithubWorkflowRequest(uint256 _id) public view returns(
-    bytes32 fileHash,
+    string memory fileHash,
     address account,
     uint256 fee,
     address sender,
@@ -52,7 +52,7 @@ contract GithubWorkflowClient {
     );
   }
 
-  function registerGithubWorkflow(address _account, string memory _name, bytes32 _hash,  uint256 _fee) internal {
+  function registerGithubWorkflow(address _account, string memory _name, string memory _hash,  uint256 _fee) internal {
     githubWorkflows[_name] = GithubWorkflow(_hash, _account, _fee);
   }
 
@@ -64,7 +64,7 @@ contract GithubWorkflowClient {
     githubWorkflows[_name].fee = _amount;
   }
 
-  function setGithubWorkflowHash(string calldata _name, bytes32 _hash) onlyWorkflow(_name) public {
+  function setGithubWorkflowHash(string calldata _name, string calldata _hash) onlyWorkflow(_name) public {
     githubWorkflows[_name].fileHash = _hash;
   }
 
@@ -75,6 +75,7 @@ contract GithubWorkflowClient {
 
     lastGithubWorkflowRequestId++;
     githubWorkflowRequests[lastGithubWorkflowRequestId] = GithubWorkflowRequest(
+      msg.sender,
       _name,
       _githubUserId,
       false
