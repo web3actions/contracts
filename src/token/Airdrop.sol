@@ -19,9 +19,16 @@ contract Airdrop is GithubWorkflowClient {
     githubWorkflowRequest('airdrop', _githubUserId);
   }
 
-  function fulfillAirdrop(uint256 _requestId, uint256 _amount) public githubWorkflowResponse(_requestId) {
+  event AirdropEvent(uint256 requestId, address to, string githubUserId, uint256 value);
+  function fulfillAirdrop(uint256 _requestId, address _to, uint256 _contributionCount) public githubWorkflowResponse(_requestId) {
     require(claimed[githubWorkflowRequests[_requestId].githubUserId] == 0, 'Airdrop already claimed.');
-    claimed[githubWorkflowRequests[_requestId].githubUserId] = _amount;
-    token.transfer(githubWorkflowRequests[_requestId].sender, _amount);
+    if (_contributionCount > 10000) {
+      _contributionCount = 10000;
+    }
+    uint256 value = (_contributionCount * 10**18) / 10;
+    claimed[githubWorkflowRequests[_requestId].githubUserId] = value;
+    token.transfer(_to, value);
+
+    emit AirdropEvent(_requestId, _to, githubWorkflowRequests[_requestId].githubUserId, value);
   }
 }
