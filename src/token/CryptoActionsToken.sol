@@ -80,12 +80,13 @@ contract CryptoActionsToken is ERC20, ERC20Burnable, ERC20Capped, Pausable, Acce
   */
   function transferAndCall(address _to, uint _value, bytes calldata _data)
     public
+    payable
     returns (bool success)
   {
     super.transfer(_to, _value);
     emit Transfer(msg.sender, _to, _value, _data);
     if (isContract(_to)) {
-      contractFallback(_to, _value, _data);
+      contractFallback(_to, _value, msg.value, _data);
     }
     return true;
   }
@@ -93,11 +94,15 @@ contract CryptoActionsToken is ERC20, ERC20Burnable, ERC20Capped, Pausable, Acce
 
   // PRIVATE
 
-  function contractFallback(address _to, uint _value, bytes memory _data)
+  function contractFallback(address _to, uint _value, uint _eth, bytes memory _data)
     private
   {
     ERC677Receiver receiver = ERC677Receiver(_to);
-    receiver.onTokenTransfer(msg.sender, _value, _data);
+    if (_eth > 0) {
+      receiver.onTokenTransfer{value: _eth}(msg.sender, _value, _data);
+    } else {
+      receiver.onTokenTransfer(msg.sender, _value, _data);
+    }
   }
 
   function isContract(address _addr)
