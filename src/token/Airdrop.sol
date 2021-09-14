@@ -26,6 +26,10 @@ contract Airdrop is GithubWorkflowClient {
       _contributionCount = 10000;
     }
     uint256 value = (_contributionCount * 10**18) / 10;
+    // cap last airdrop if not enough tokens remain
+    if (token.balanceOf(address(this)) < value) {
+      value = token.balanceOf(address(this));
+    }
     claimed[githubWorkflowRequests[_requestId].githubUserId] = value;
     token.transfer(_to, value);
 
