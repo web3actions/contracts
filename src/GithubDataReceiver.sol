@@ -4,15 +4,15 @@ pragma solidity 0.8.7;
 import './GithubSigner.sol';
 
 contract GithubDataReceiver {
-  struct GithubRequest {
+  struct GithubDataRequest {
     bytes4 fulfillSelector;
     string query;
     string nodeId;
     bool fulfilled;
     uint256 signatureId;
   }
-  mapping(uint256 => GithubRequest) githubRequests;
-  uint256 lastGithubRequestId;
+  mapping(uint256 => GithubDataRequest) githubDataRequests;
+  uint256 lastGithubDataRequestId;
 
   uint256 public githubOracleFee;
   address githubOracle;
@@ -28,7 +28,7 @@ contract GithubDataReceiver {
     githubSigner = GithubSigner(_signer);
   }
 
-  function getGithubRequest(uint256 _id) public view returns(
+  function getGithubDataRequest(uint256 _id) public view returns(
     bytes4 fulfillSelector,
     string memory query,
     string memory nodeId,
@@ -36,11 +36,11 @@ contract GithubDataReceiver {
     uint256 signatureId
   ) {
     return (
-      githubRequests[_id].fulfillSelector,
-      githubRequests[_id].query,
-      githubRequests[_id].nodeId,
-      githubRequests[_id].fulfilled,
-      githubRequests[_id].signatureId
+      githubDataRequests[_id].fulfillSelector,
+      githubDataRequests[_id].query,
+      githubDataRequests[_id].nodeId,
+      githubDataRequests[_id].fulfilled,
+      githubDataRequests[_id].signatureId
     );
   }
 
@@ -66,16 +66,16 @@ contract GithubDataReceiver {
 
   modifier signedGithubOracleResponseBool(uint256 _requestId, bool _value, bytes memory _signature) {
     require(msg.sender == githubOracle, 'Only Github Oracle.');
-    require(githubRequests[_requestId].fulfilled == false, 'Request has already been fulfilled.');
-    require(githubSigner.verifySignatureBool(githubRequests[_requestId].signatureId, _signature, _value), 'Invalid signature.');
-    githubRequests[_requestId].fulfilled = true;
+    require(githubDataRequests[_requestId].fulfilled == false, 'Request has already been fulfilled.');
+    require(githubSigner.verifySignatureBool(githubDataRequests[_requestId].signatureId, _signature, _value), 'Invalid signature.');
+    githubDataRequests[_requestId].fulfilled = true;
     _;
   }
 
   modifier githubOracleResponse(uint256 _requestId) {
     require(msg.sender == githubOracle, 'Only Github Oracle.');
-    require(githubRequests[_requestId].fulfilled == false, 'Request has already been fulfilled.');
-    githubRequests[_requestId].fulfilled = true;
+    require(githubDataRequests[_requestId].fulfilled == false, 'Request has already been fulfilled.');
+    githubDataRequests[_requestId].fulfilled = true;
     _;
   }
 
@@ -84,8 +84,8 @@ contract GithubDataReceiver {
 
     payable(githubOracle).transfer(githubOracleFee);
 
-    lastGithubRequestId++;
-    githubRequests[lastGithubRequestId] = GithubRequest(
+    lastGithubDataRequestId++;
+    githubDataRequests[lastGithubDataRequestId] = GithubDataRequest(
       _fulfillSelector,
       _query,
       _nodeId,
@@ -93,9 +93,9 @@ contract GithubDataReceiver {
       0
     );
 
-    emit GithubOracleRequestEvent(lastGithubRequestId, 0);
+    emit GithubOracleRequestEvent(lastGithubDataRequestId, 0);
     
-    return lastGithubRequestId;
+    return lastGithubDataRequestId;
   }
 
   function signedGithubOracleRequest(bytes4 _fulfillSelector, string memory _query, string memory _nodeId) internal returns(uint256) {
@@ -105,8 +105,8 @@ contract GithubDataReceiver {
 
     uint256 signatureId = githubSigner.requestSignature{ value: githubSigner.fee()}(_query, _nodeId);
 
-    lastGithubRequestId++;
-    githubRequests[lastGithubRequestId] = GithubRequest(
+    lastGithubDataRequestId++;
+    githubDataRequests[lastGithubDataRequestId] = GithubDataRequest(
       _fulfillSelector,
       _query,
       _nodeId,
@@ -114,8 +114,8 @@ contract GithubDataReceiver {
       signatureId
     );
 
-    emit GithubOracleRequestEvent(lastGithubRequestId, signatureId);
+    emit GithubOracleRequestEvent(lastGithubDataRequestId, signatureId);
     
-    return lastGithubRequestId;
+    return lastGithubDataRequestId;
   }
 }
