@@ -55,6 +55,33 @@ contract GithubSigner {
     return recovered == owner;
   }
 
+  function verifySignatureAddress(uint256 _requestId, bytes calldata _signature, address _value) public view returns(bool) {
+    require(msg.sender == requests[_requestId].consumer, 'Request can only be verified by who sent it.');
+
+    bytes32 message = prefixed(keccak256(abi.encodePacked(requests[_requestId].query, requests[_requestId].nodeId, _value)));
+    address recovered = recoverSigner(message, _signature);
+
+    return recovered == owner;
+  }
+
+  function verifySignatureInt(uint256 _requestId, bytes calldata _signature, uint256 _value) public view returns(bool) {
+    require(msg.sender == requests[_requestId].consumer, 'Request can only be verified by who sent it.');
+
+    bytes32 message = prefixed(keccak256(abi.encodePacked(requests[_requestId].query, requests[_requestId].nodeId, _value)));
+    address recovered = recoverSigner(message, _signature);
+
+    return recovered == owner;
+  }
+
+  function verifySignatureString(uint256 _requestId, bytes calldata _signature, string calldata _value) public view returns(bool) {
+    require(msg.sender == requests[_requestId].consumer, 'Request can only be verified by who sent it.');
+
+    bytes32 message = prefixed(keccak256(abi.encodePacked(requests[_requestId].query, requests[_requestId].nodeId, _value)));
+    address recovered = recoverSigner(message, _signature);
+
+    return recovered == owner;
+  }
+
   // signature methods.
   function splitSignature(bytes memory sig)
       internal

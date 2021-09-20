@@ -5,6 +5,7 @@ import './GithubSigner.sol';
 
 contract GithubDataReceiver {
   struct GithubDataRequest {
+    address sender;
     bytes4 fulfillSelector;
     string query;
     string nodeId;
@@ -29,6 +30,7 @@ contract GithubDataReceiver {
   }
 
   function getGithubDataRequest(uint256 _id) public view returns(
+    address sender,
     bytes4 fulfillSelector,
     string memory query,
     string memory nodeId,
@@ -36,6 +38,7 @@ contract GithubDataReceiver {
     uint256 signatureId
   ) {
     return (
+      githubDataRequests[_id].sender,
       githubDataRequests[_id].fulfillSelector,
       githubDataRequests[_id].query,
       githubDataRequests[_id].nodeId,
@@ -72,6 +75,30 @@ contract GithubDataReceiver {
     _;
   }
 
+  modifier signedGithubOracleResponseAddress(uint256 _requestId, address _value, bytes memory _signature) {
+    require(msg.sender == githubOracle, 'Only Github Oracle.');
+    require(githubDataRequests[_requestId].fulfilled == false, 'Request has already been fulfilled.');
+    require(githubSigner.verifySignatureAddress(githubDataRequests[_requestId].signatureId, _signature, _value), 'Invalid signature.');
+    githubDataRequests[_requestId].fulfilled = true;
+    _;
+  }
+
+  modifier signedGithubOracleResponseInt(uint256 _requestId, uint256 _value, bytes memory _signature) {
+    require(msg.sender == githubOracle, 'Only Github Oracle.');
+    require(githubDataRequests[_requestId].fulfilled == false, 'Request has already been fulfilled.');
+    require(githubSigner.verifySignatureInt(githubDataRequests[_requestId].signatureId, _signature, _value), 'Invalid signature.');
+    githubDataRequests[_requestId].fulfilled = true;
+    _;
+  }
+
+  modifier signedGithubOracleResponseString(uint256 _requestId, string memory _value, bytes memory _signature) {
+    require(msg.sender == githubOracle, 'Only Github Oracle.');
+    require(githubDataRequests[_requestId].fulfilled == false, 'Request has already been fulfilled.');
+    require(githubSigner.verifySignatureString(githubDataRequests[_requestId].signatureId, _signature, _value), 'Invalid signature.');
+    githubDataRequests[_requestId].fulfilled = true;
+    _;
+  }
+
   modifier githubOracleResponse(uint256 _requestId) {
     require(msg.sender == githubOracle, 'Only Github Oracle.');
     require(githubDataRequests[_requestId].fulfilled == false, 'Request has already been fulfilled.');
@@ -86,6 +113,7 @@ contract GithubDataReceiver {
 
     lastGithubDataRequestId++;
     githubDataRequests[lastGithubDataRequestId] = GithubDataRequest(
+      msg.sender,
       _fulfillSelector,
       _query,
       _nodeId,
@@ -107,6 +135,7 @@ contract GithubDataReceiver {
 
     lastGithubDataRequestId++;
     githubDataRequests[lastGithubDataRequestId] = GithubDataRequest(
+      msg.sender,
       _fulfillSelector,
       _query,
       _nodeId,
