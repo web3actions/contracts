@@ -1,24 +1,24 @@
 {
-  "name": "@cryptoactions/contracts",
-  "version": "1.0.0",
+  "name": "@web3actions/contracts",
+  "version": "0.0.1",
   "files": [
     "/src/**/*.sol",
     "/build/*.json"
   ],
-  "description": "Oracle contracts and examples",
+  "description": "WorkflowClient contract and token.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cryptoactions/contracts.git"
+    "url": "git+https://github.com/web3actions/contracts.git"
   },
-  "author": "",
+  "author": "mktcode",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/cryptoactions/contracts/issues"
+    "url": "https://github.com/web3actions/contracts/issues"
   },
-  "homepage": "https://github.com/cryptoactions/contracts#readme",
+  "homepage": "https://github.com/web3actions/contracts#readme",
   "dependencies": {
     "@openzeppelin/contracts": "^4.3.1",
     "@truffle/hdwallet-provider": "^1.5.0"

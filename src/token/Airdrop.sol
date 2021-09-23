@@ -2,26 +2,38 @@
 pragma solidity 0.8.7;
 
 import '../GithubWorkflowClient.sol';
-import './CryptoActionsToken.sol';
+import './Web3ActionsToken.sol';
 
 contract Airdrop is GithubWorkflowClient {
-  CryptoActionsToken public token;
-
+  Web3ActionsToken public token;
+  uint256 claimFee;
+  mapping(string => bool) unlocked;
   mapping(string => uint256) claimed;
-  uint256 public claimedTotal;
 
   constructor(address _token, string memory _workflowHash) {
-    token = CryptoActionsToken(_token);
-    registerGithubWorkflow(msg.sender, 'airdrop', _workflowHash, 10000000000000000);
+    token = Web3ActionsToken(_token);
+    claimFee = 10000000000000000;
+    registerGithubWorkflow(msg.sender, "airdrop", _workflowHash);
   }
 
   function requestAirdrop(string calldata _githubUserId) payable public {
-    githubWorkflowRequest('airdrop', _githubUserId);
+    require(msg.value >= claimFee, "ETH amount too low to pay for oracle.");
+    unlocked[_githubUserId] = true;
   }
 
-  event AirdropEvent(uint256 requestId, address to, string githubUserId, uint256 value);
-  function fulfillAirdrop(uint256 _requestId, address _to, uint256 _contributionCount) public githubWorkflowResponse(_requestId) {
-    require(claimed[githubWorkflowRequests[_requestId].githubUserId] == 0, 'Airdrop already claimed.');
+  event AirdropEvent(address to, string githubUserId, uint256 value);
+
+  function fulfillAirdrop(
+    string calldata _githubUserId,
+    address _to,
+    uint256 _contributionCount,
+    uint256 _runId,
+    bytes calldata _signature
+  )
+    public
+    onlyWorkflow(_runId, "airdrop", _signature)
+  {
+    require(claimed[_githubUserId] == 0, "Airdrop already claimed.");
     if (_contributionCount > 10000) {
       _contributionCount = 10000;
     }
@@ -30,9 +42,9 @@ contract Airdrop is GithubWorkflowClient {
     if (token.balanceOf(address(this)) < value) {
       value = token.balanceOf(address(this));
     }
-    claimed[githubWorkflowRequests[_requestId].githubUserId] = value;
+    claimed[_githubUserId] = value;
     token.transfer(_to, value);
 
-    emit AirdropEvent(_requestId, _to, githubWorkflowRequests[_requestId].githubUserId, value);
+    emit AirdropEvent(_to, _githubUserId, value);
   }
 }

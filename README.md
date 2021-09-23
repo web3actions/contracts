@@ -1,3 +1,3 @@
-# Crypto Actions Oracle Contracts
+# Web3 Actions Contracts
 
 Work in progress...

@@ -10,13 +10,13 @@ import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 import "./ERC677Receiver.sol";
 
-contract CryptoActionsToken is ERC20, ERC20Burnable, ERC20Capped, Pausable, AccessControl, ERC20Permit, ERC20Votes {
+contract Web3ActionsToken is ERC20, ERC20Burnable, ERC20Capped, Pausable, AccessControl, ERC20Permit, ERC20Votes {
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     constructor()
-        ERC20("Crypto Actions Token", "ACTION")
-        ERC20Permit("Crypto Actions Token")
+        ERC20("Web3 Actions Token", "ACTION")
+        ERC20Permit("Web3 Actions Token")
         ERC20Capped(1000000000000000000000000)
     {
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
