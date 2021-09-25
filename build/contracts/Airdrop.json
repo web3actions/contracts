@@ -53,7 +53,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -66,7 +67,8 @@
       "name": "requestAirdrop",
       "outputs": [],
       "stateMutability": "payable",
-      "type": "function"
+      "type": "function",
+      "payable": true
     },
     {
       "inputs": [
@@ -12241,9 +12243,17 @@
     "name": "solc",
     "version": "0.8.7+commit.e28d00a7.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "42": {
+      "events": {},
+      "links": {},
+      "address": "0xA326296eFaE009337425F8D8965e3916eB318c46",
+      "transactionHash": "0xef90781d6ae4ad6e68d8f26176e42aa27ca6d443be15b494f36cb292ff62d091"
+    }
+  },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-09-23T14:49:20.323Z",
+  "updatedAt": "2021-09-23T22:01:20.292Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},
