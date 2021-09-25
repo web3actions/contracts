@@ -68,16 +68,16 @@ contract Web3ActionsToken is ERC20, ERC20Burnable, ERC20Capped, Pausable, Access
         super._burn(account, amount);
     }
 
-    // ERC677
+    // (payable) ERC677
 
     event Transfer(address indexed from, address indexed to, uint value, bytes data);
 
-    /**
-  * @dev transfer token to a contract address with additional data if the recipient is a contact.
-  * @param _to The address to transfer to.
-  * @param _value The amount to be transferred.
-  * @param _data The extra data to be passed to the receiving contract.
-  */
+  /**
+   * @dev Transfer token to a contract address with additional data if the recipient is a contact and forward ETH to contract or external account.
+   * @param _to The address to transfer to.
+   * @param _value The amount to be transferred.
+   * @param _data The extra data to be passed to the receiving contract.
+   */
   function transferAndCall(address _to, uint _value, bytes calldata _data)
     public
     payable
@@ -87,12 +87,11 @@ contract Web3ActionsToken is ERC20, ERC20Burnable, ERC20Capped, Pausable, Access
     emit Transfer(msg.sender, _to, _value, _data);
     if (isContract(_to)) {
       contractFallback(_to, _value, msg.value, _data);
+    } else {
+      payable(_to).transfer(msg.value);
     }
     return true;
   }
-
-
-  // PRIVATE
 
   function contractFallback(address _to, uint _value, uint _eth, bytes memory _data)
     private
