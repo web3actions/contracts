@@ -1,6 +1,6 @@
 {
   "name": "@web3actions/contracts",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "files": [
     "/src/**/*.sol",
     "/build/*.json"
