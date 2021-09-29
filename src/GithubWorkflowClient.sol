@@ -10,7 +10,7 @@ abstract contract GithubWorkflowClient {
   }
   mapping(string => GithubWorkflow) githubWorkflows;
 
-  modifier onlyWorkflow(uint256 _runId, string memory _name, bytes memory _signature) {
+  modifier onlyGithubWorkflow(uint256 _runId, string memory _name, bytes memory _signature) {
     require(msg.sender == githubWorkflows[_name].account, "Only workflow account can use this function.");
 
     bytes32 message = prefixed(keccak256(abi.encodePacked(githubWorkflows[_name].fileHash, _runId)));
