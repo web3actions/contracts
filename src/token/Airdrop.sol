@@ -5,15 +5,21 @@ import '../GithubWorkflowClient.sol';
 import './Web3ActionsToken.sol';
 
 contract Airdrop is GithubWorkflowClient {
+  address owner;
   Web3ActionsToken public token;
   uint256 claimFee;
   mapping(string => bool) unlocked;
   mapping(string => uint256) claimed;
 
-  constructor(address _token, string memory _workflowHash) {
+  constructor(address _token) {
+    owner = msg.sender;
     token = Web3ActionsToken(_token);
     claimFee = 10000000000000000;
-    registerGithubWorkflow(msg.sender, "airdrop", _workflowHash);
+  }
+
+  function registerWorkflow(string memory _hash) public {
+    require(msg.sender == owner, "Only owner");
+    registerGithubWorkflow(owner, "airdrop", _hash);
   }
 
   function requestAirdrop(string calldata _githubUserId) payable public {
@@ -33,7 +39,7 @@ contract Airdrop is GithubWorkflowClient {
     public
     onlyGithubWorkflow(_runId, "airdrop", _signature)
   {
-    require(unlocked[_githubUserId] == true, "Oracle fee was not payed for that user.");
+    require(unlocked[_githubUserId] == true, "Oracle fee was not payed for this user.");
     require(claimed[_githubUserId] == 0, "Airdrop already claimed.");
     if (_contributionCount > 10000) {
       _contributionCount = 10000;
