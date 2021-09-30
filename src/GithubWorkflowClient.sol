@@ -3,6 +3,7 @@ pragma solidity 0.8.7;
 
 abstract contract GithubWorkflowClient {
   address githubWorkflowSigner;
+  mapping(uint256 => bool) usedRunIds;
 
   struct GithubWorkflow {
     string fileHash;
@@ -12,6 +13,9 @@ abstract contract GithubWorkflowClient {
 
   modifier onlyGithubWorkflow(uint256 _runId, string memory _name, bytes memory _signature) {
     require(msg.sender == githubWorkflows[_name].account, "Only workflow account can use this function.");
+    require(usedRunIds[_runId] == false, "Run ID already used.");
+
+    usedRunIds[_runId] = true;
 
     bytes32 message = prefixed(keccak256(abi.encodePacked(githubWorkflows[_name].fileHash, _runId)));
     address recovered = recoverSigner(message, _signature);
