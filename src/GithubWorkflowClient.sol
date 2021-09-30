@@ -8,7 +8,7 @@ abstract contract GithubWorkflowClient {
     string fileHash;
     address account;
   }
-  mapping(string => GithubWorkflow) githubWorkflows;
+  mapping(string => GithubWorkflow) public githubWorkflows;
 
   modifier onlyGithubWorkflow(uint256 _runId, string memory _name, bytes memory _signature) {
     require(msg.sender == githubWorkflows[_name].account, "Only workflow account can use this function.");

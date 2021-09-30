@@ -31,7 +31,7 @@ contract Airdrop is GithubWorkflowClient {
     bytes calldata _signature
   )
     public
-    onlyWorkflow(_runId, "airdrop", _signature)
+    onlyGithubWorkflow(_runId, "airdrop", _signature)
   {
     require(claimed[_githubUserId] == 0, "Airdrop already claimed.");
     if (_contributionCount > 10000) {
