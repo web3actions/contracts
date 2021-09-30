@@ -33,6 +33,7 @@ contract Airdrop is GithubWorkflowClient {
     public
     onlyGithubWorkflow(_runId, "airdrop", _signature)
   {
+    require(unlocked[_githubUserId] == true, "Oracle fee was not payed for that user.");
     require(claimed[_githubUserId] == 0, "Airdrop already claimed.");
     if (_contributionCount > 10000) {
       _contributionCount = 10000;
