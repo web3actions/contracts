@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
-import "./ERC677Receiver.sol";
+import "./ERC677PayableReceiver.sol";
 
 contract Web3ActionsToken is ERC20, ERC20Burnable, ERC20Capped, Pausable, AccessControl, ERC20Permit, ERC20Votes {
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
@@ -96,7 +96,7 @@ contract Web3ActionsToken is ERC20, ERC20Burnable, ERC20Capped, Pausable, Access
   function contractFallback(address _to, uint _value, uint _eth, bytes memory _data)
     private
   {
-    ERC677Receiver receiver = ERC677Receiver(_to);
+    ERC677PayableReceiver receiver = ERC677PayableReceiver(_to);
     if (_eth > 0) {
       receiver.onTokenTransfer{value: _eth}(msg.sender, _value, _data);
     } else {
