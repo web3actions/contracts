@@ -23,6 +23,7 @@ contract MyContract is GithubWorkflowClient {
 
   function claim(
     string calldata _githubUserId,
+    address _to,
     uint256 _runId,
     bytes calldata _signature
   )
@@ -32,4 +33,21 @@ contract MyContract is GithubWorkflowClient {
     // ...
   }
 }
+```
+
+```yaml
+# workflow file
+steps:
+  - name: Claim
+    uses: web3actions/tx@bc0119599bd6377e4b4070722d77feb6f07986f8
+    with:
+      network: kovan
+      infura-key: ${{ secrets.INFURA_KEY }}
+      wallet-key: ${{ secrets.WALLET_KEY }}
+      contract: "0x123456..."
+      function: "claim(string,address,uint256,bytes)" # ...,uint256,bytes for run id and signature
+      inputs: '["${{ github.event.issue.user.node_id }}", "${{ fromJSON(github.event.issue.body).to }}"]'
+      signer: web3actions/signer # signs this workflow's file hash and run id
+      github-token: ${{ secrets.PAT }}
+      gas-limit: 100000
 ```
