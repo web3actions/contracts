@@ -14,7 +14,7 @@ contract Airdrop is GithubWorkflowClient {
   constructor(address _token) {
     owner = msg.sender;
     token = Web3ActionsToken(_token);
-    claimFee = 10000000000000000;
+    claimFee = 1000000000000000;
   }
 
   function registerWorkflow(string memory _hash) public {
