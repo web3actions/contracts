@@ -39,15 +39,15 @@
     "absolutePath": "project:/src/token/ERC677PayableReceiver.sol",
     "exportedSymbols": {
       "ERC677PayableReceiver": [
-        3842
+        3850
       ]
     },
-    "id": 3843,
+    "id": 3851,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3832,
+        "id": 3840,
         "literals": [
           "solidity",
           "0.8",
@@ -62,9 +62,9 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": false,
-        "id": 3842,
+        "id": 3850,
         "linearizedBaseContracts": [
-          3842
+          3850
         ],
         "name": "ERC677PayableReceiver",
         "nameLocation": "74:21:23",
@@ -72,7 +72,7 @@
         "nodes": [
           {
             "functionSelector": "a4c0ed36",
-            "id": 3841,
+            "id": 3849,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -80,17 +80,17 @@
             "nameLocation": "109:15:23",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3839,
+              "id": 3847,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3834,
+                  "id": 3842,
                   "mutability": "mutable",
                   "name": "_sender",
                   "nameLocation": "133:7:23",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3841,
+                  "scope": 3849,
                   "src": "125:15:23",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -99,7 +99,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3833,
+                    "id": 3841,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "125:7:23",
@@ -113,12 +113,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 3836,
+                  "id": 3844,
                   "mutability": "mutable",
                   "name": "_value",
                   "nameLocation": "147:6:23",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3841,
+                  "scope": 3849,
                   "src": "142:11:23",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -127,7 +127,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 3835,
+                    "id": 3843,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "142:4:23",
@@ -140,12 +140,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 3838,
+                  "id": 3846,
                   "mutability": "mutable",
                   "name": "_data",
                   "nameLocation": "168:5:23",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3841,
+                  "scope": 3849,
                   "src": "155:18:23",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -154,7 +154,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 3837,
+                    "id": 3845,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "155:5:23",
@@ -169,19 +169,19 @@
               "src": "124:50:23"
             },
             "returnParameters": {
-              "id": 3840,
+              "id": 3848,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "197:0:23"
             },
-            "scope": 3842,
+            "scope": 3850,
             "src": "100:98:23",
             "stateMutability": "payable",
             "virtual": true,
             "visibility": "public"
           }
         ],
-        "scope": 3843,
+        "scope": 3851,
         "src": "56:144:23",
         "usedErrors": []
       }
@@ -192,15 +192,15 @@
     "absolutePath": "project:/src/token/ERC677PayableReceiver.sol",
     "exportedSymbols": {
       "ERC677PayableReceiver": [
-        3842
+        3850
       ]
     },
-    "id": 3843,
+    "id": 3851,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 3832,
+        "id": 3840,
         "literals": [
           "solidity",
           "0.8",
@@ -215,9 +215,9 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": false,
-        "id": 3842,
+        "id": 3850,
         "linearizedBaseContracts": [
-          3842
+          3850
         ],
         "name": "ERC677PayableReceiver",
         "nameLocation": "74:21:23",
@@ -225,7 +225,7 @@
         "nodes": [
           {
             "functionSelector": "a4c0ed36",
-            "id": 3841,
+            "id": 3849,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -233,17 +233,17 @@
             "nameLocation": "109:15:23",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 3839,
+              "id": 3847,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 3834,
+                  "id": 3842,
                   "mutability": "mutable",
                   "name": "_sender",
                   "nameLocation": "133:7:23",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3841,
+                  "scope": 3849,
                   "src": "125:15:23",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -252,7 +252,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 3833,
+                    "id": 3841,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "125:7:23",
@@ -266,12 +266,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 3836,
+                  "id": 3844,
                   "mutability": "mutable",
                   "name": "_value",
                   "nameLocation": "147:6:23",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3841,
+                  "scope": 3849,
                   "src": "142:11:23",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -280,7 +280,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 3835,
+                    "id": 3843,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "142:4:23",
@@ -293,12 +293,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 3838,
+                  "id": 3846,
                   "mutability": "mutable",
                   "name": "_data",
                   "nameLocation": "168:5:23",
                   "nodeType": "VariableDeclaration",
-                  "scope": 3841,
+                  "scope": 3849,
                   "src": "155:18:23",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -307,7 +307,7 @@
                     "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 3837,
+                    "id": 3845,
                     "name": "bytes",
                     "nodeType": "ElementaryTypeName",
                     "src": "155:5:23",
@@ -322,19 +322,19 @@
               "src": "124:50:23"
             },
             "returnParameters": {
-              "id": 3840,
+              "id": 3848,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "197:0:23"
             },
-            "scope": 3842,
+            "scope": 3850,
             "src": "100:98:23",
             "stateMutability": "payable",
             "virtual": true,
             "visibility": "public"
           }
         ],
-        "scope": 3843,
+        "scope": 3851,
         "src": "56:144:23",
         "usedErrors": []
       }
@@ -347,7 +347,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-10-03T14:53:30.766Z",
+  "updatedAt": "2021-10-03T15:50:12.960Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},
