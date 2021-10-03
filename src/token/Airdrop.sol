@@ -28,8 +28,8 @@ contract Airdrop is GithubWorkflowClient {
     payments[_githubUserId] = true;
   }
 
-  function isPayed(string calldata _githubUserId) public view returns(bool) {
-    return payments[_githubUserId];
+  function canClaim(string calldata _githubUserId) public view returns(bool) {
+    return payments[_githubUserId] == true && claimed[_githubUserId] == 0;
   }
 
   event AirdropEvent(address to, string githubUserId, uint256 value);
