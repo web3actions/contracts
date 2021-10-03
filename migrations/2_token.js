@@ -1,11 +1,11 @@
 const Web3ActionsToken = artifacts.require('Web3ActionsToken')
 const Airdrop = artifacts.require('Airdrop')
 
-module.exports = async function (deployer) {
+module.exports = async function (deployer, network, accounts) {
   await deployer.deploy(Web3ActionsToken)
   const token = await Web3ActionsToken.deployed()
   
-  await deployer.deploy(Airdrop, token.address)
+  await deployer.deploy(Airdrop, token.address, accounts[1])
   const airdrop = await Airdrop.deployed()
   
   await token.mint('0x27711f9c07230632F2EE1A21a967a9AC4729E520', '420000000000000000000000')

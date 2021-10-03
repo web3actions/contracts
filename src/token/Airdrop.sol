@@ -11,7 +11,8 @@ contract Airdrop is GithubWorkflowClient {
   mapping(string => bool) payments;
   mapping(string => uint256) claimed;
 
-  constructor(address _token) {
+  constructor(address _token, address _signer) {
+    githubWorkflowSigner = _signer;
     owner = msg.sender;
     token = Web3ActionsToken(_token);
     claimFee = 1000000000000000;
@@ -39,10 +40,8 @@ contract Airdrop is GithubWorkflowClient {
     uint256 _contributionCount,
     uint256 _runId,
     bytes calldata _signature
-  )
-    public
-    onlyGithubWorkflow(_runId, "airdrop", _signature)
-  {
+  ) public {
+    verifyWorkflowRun(_runId, "airdrop", _signature);
     require(payments[_githubUserId] == true, "Oracle fee was not payed for this user.");
     require(claimed[_githubUserId] == 0, "Airdrop already claimed.");
     if (_contributionCount > 10000) {

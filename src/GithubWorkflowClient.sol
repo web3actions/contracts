@@ -2,7 +2,7 @@
 pragma solidity 0.8.7;
 
 abstract contract GithubWorkflowClient {
-  address githubWorkflowSigner;
+  address public githubWorkflowSigner;
   mapping(uint256 => bool) usedRunIds;
 
   struct GithubWorkflow {
@@ -11,7 +11,7 @@ abstract contract GithubWorkflowClient {
   }
   mapping(string => GithubWorkflow) public githubWorkflows;
 
-  modifier onlyGithubWorkflow(uint256 _runId, string memory _name, bytes memory _signature) {
+  function verifyWorkflowRun(uint256 _runId, string memory _name, bytes memory _signature) internal {
     require(msg.sender == githubWorkflows[_name].account, "Only workflow account can use this function.");
     require(usedRunIds[_runId] == false, "Run ID already used.");
 
@@ -21,8 +21,6 @@ abstract contract GithubWorkflowClient {
     address recovered = recoverSigner(message, _signature);
 
     require(recovered == githubWorkflowSigner, "Invalid signature.");
-
-    _;
   }
 
   function registerGithubWorkflow(address _account, string memory _name, string memory _hash) internal {
